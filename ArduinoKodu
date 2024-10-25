@@ -1,0 +1,49 @@
+#include <Servo.h>
+
+Servo servoX;
+Servo servoY;
+
+const int servoXPin = 9;
+const int servoYPin = 10;
+
+int aciX = 60;
+int aciY = 90;
+
+const int minYaci = 0;
+const int maxYaci = 180;
+
+const int minXaci = 30;
+const int maxXaci = 90;
+
+const int adimBoyutu = 5;
+const int beklemeSuresi = 200;
+
+void setup() {
+  servoX.attach(servoXPin);
+  servoY.attach(servoYPin);
+
+  servoX.write(aciX);
+  servoY.write(aciY);
+
+  Serial.begin(9600);
+}
+
+void loop() {
+  servoHareket(servoX, aciX, minXaci, maxXaci);
+  servoHareket(servoY, aciY, minYaci, maxYaci);
+  
+  delay(beklemeSuresi);
+}
+
+void servoHareket(Servo &servo, int &aci, int minAci, int maxAci) {
+  int yon = random(0, 2) == 0 ? -1 : 1;
+  aci += yon * adimBoyutu;
+
+  if (aci > maxAci) aci = maxAci;
+  if (aci < minAci) aci = minAci;
+
+  servo.write(aci);
+
+  Serial.print("Yeni Aci: ");
+  Serial.println(aci);
+}
